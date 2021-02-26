@@ -1,0 +1,8 @@
+app_name: pokemon
+http_port: 3030
+log_level: debug
+services:
+  pokemonAPI:
+    host: https://pokeapi.co/api/v2/
+    timeout: 3s
+pokedex: config/pokedex.csv
