@@ -1,13 +1,15 @@
 package service
 
 import (
+	"fmt"
+	"io"
+	"io/ioutil"
 	"net/http"
+	"net/http/httptest"
 	"testing"
-	"time"
 
 	cError "github.com/coreos/etcd/error"
 	"github.com/go-playground/assert/v2"
-	"gopkg.in/resty.v1"
 )
 
 func Test_PokemonAPI(t *testing.T) {
@@ -42,30 +44,22 @@ func Test_PokemonAPI(t *testing.T) {
 	}
 
 	for _, tt := range test {
-		client := resty.New().
-			SetHostURL("https://pokeapi.co/api/v2/").
-			SetTimeout(time.Second * 10).
-			OnAfterResponse(func(c *resty.Client, r *resty.Response) error {
-				if r.IsSuccess() {
-					return nil
-				}
-
-				return cError.NewError(r.StatusCode(), "error", 0)
-			})
-
-		s := &Service{
-			client: client,
-		}
-
 		t.Run(tt.name, func(t *testing.T) {
-			resp, err := s.client.R().
-				SetPathParams(map[string]string{"pokemonId": tt.id}).
-				SetHeader("Accept", "application/json").
-				Get("pokemon/{pokemonId}")
+			handler := func(w http.ResponseWriter, r *http.Request) {
+				io.WriteString(w, string(tt.expectedBody))
+			}
 
-			assert.Equal(t, tt.err, err)
-			assert.Equal(t, tt.statusCode, int(resp.StatusCode()))
+			req := httptest.NewRequest("GET", "https://pokeapi.co/api/v2/pokemon/"+tt.id, nil)
+			w := httptest.NewRecorder()
+			w.WriteHeader(tt.statusCode)
+			handler(w, req)
 
+			resp := w.Result()
+			body, _ := ioutil.ReadAll(resp.Body)
+			fmt.Println(resp.StatusCode)
+
+			assert.Equal(t, tt.statusCode, int(resp.StatusCode))
+			assert.Equal(t, tt.expectedBody, body)
 		})
 	}
 }

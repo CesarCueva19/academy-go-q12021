@@ -21,6 +21,7 @@ import (
 // Exit Errors
 const (
 	ExitErrorLoadingConfig = iota
+	ExitErrorCreatingLogger
 	ExitErrorLoadingCSVFile
 	ExitErrorCreatingPokeonClient
 )
@@ -46,6 +47,7 @@ func main() {
 	level, err := logrus.ParseLevel(config.LogLevel)
 	if err != nil {
 		log.Fatal("Failed creating logger: %w", err)
+		os.Exit(ExitErrorCreatingLogger)
 	}
 
 	logger := logrus.New()

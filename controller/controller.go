@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
 
 	"pokemons/model"
@@ -35,8 +34,8 @@ func New(
 }
 
 // IndexRoute - This is the controller for default route
-func IndexRoute(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Welcome to my Pokemons API")
+func (p *PokemonController) IndexRoute(w http.ResponseWriter, r *http.Request) {
+	p.render.Text(w, http.StatusOK, "Welcome to my Pokemons API")
 }
 
 // GetPokemons - This is the controller for getting the pokemons info

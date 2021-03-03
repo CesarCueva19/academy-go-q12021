@@ -12,7 +12,7 @@ type Usecase struct {
 
 // PokemonService - Service interface
 type PokemonService interface {
-	PokemonAPI(pokemonID string) (*model.PokemonsData, error)
+	GetPokemonFromAPI(pokemonID string) (*model.PokemonsData, error)
 }
 
 // CSVService - Service interface
@@ -38,5 +38,5 @@ func (u *Usecase) GetPokemonByID(pokemonID string) (*model.PokemonsData, error) 
 
 // InsertPokemonByID -  Inserts the pokemon info by ID to the csv file from PokemonAPI
 func (u *Usecase) InsertPokemonByID(pokemonID string) (*model.PokemonsData, error) {
-	return u.pokemonService.PokemonAPI(pokemonID)
+	return u.pokemonService.GetPokemonFromAPI(pokemonID)
 }

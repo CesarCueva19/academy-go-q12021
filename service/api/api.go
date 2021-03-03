@@ -42,8 +42,8 @@ func New(
 	return &Service{logger, client, csvw}, nil
 }
 
-// PokemonAPI - Handles the client
-func (s *Service) PokemonAPI(pokemonID string) (*model.PokemonsData, error) {
+// GetPokemonFromAPI - Handles the client
+func (s *Service) GetPokemonFromAPI(pokemonID string) (*model.PokemonsData, error) {
 	var pokeAPI *model.PokemonsData
 
 	resp, err := s.client.R().

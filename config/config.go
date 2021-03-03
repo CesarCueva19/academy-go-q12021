@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"time"
 )
 
@@ -20,9 +19,4 @@ type Configuration struct {
 type ServConf struct {
 	Host    string        `mapstructure:"host" validate:"required,url"`
 	Timeout time.Duration `mapstructure:"timeout" validate:"required"`
-}
-
-// BindAddress generates address with listening port
-func (app *Configuration) BindAddress() string {
-	return fmt.Sprintf("0.0.0.0:%s", app.HTTPPort)
 }
